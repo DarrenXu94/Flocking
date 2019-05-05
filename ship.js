@@ -36,7 +36,7 @@ class Ship {
         rectMode(CENTER);
 
         translate(x, y);
-        let a = atan2(mouseY-this.pos.y, mouseX-this.pos.x);
+        let a = atan2(this.vel.y + y -this.pos.y, this.vel.x + x -this.pos.x);
         rotate(a);
 
         triangle(-15, -10,-15, 10, 15, 0)

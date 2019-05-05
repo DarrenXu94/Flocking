@@ -1,3 +1,6 @@
+let gameRunning = true
+let score = new Score()
+
 // Setting up objects
 let energyBall
 function createEnergy(){
@@ -17,9 +20,15 @@ function updateObjects() {
     energyBall.update()
 
     // Ships
-    for (let ship of ships) {
+    // for (let ship of ships) {
+    for (let i = ships.length - 1; i >= 0; i--) {
+        let ship = ships[i]
+        if (ship.toRemove) {
+            ships.splice(i, 1)
+        }
         ship.update()
     }
+    // }
 }
 
 // Drawing objects
@@ -30,6 +39,14 @@ function drawObjects(){
     // Ships
     for (let ship of ships) {
         ship.draw()
+    }
+}
+
+// Check game
+function checkGame(){
+    if (ships.length == 0){
+        score.gameOver()
+        gameRunning = false
     }
 }
 
@@ -46,12 +63,15 @@ function setup () {
 
 }
 
-function windowResized() {
-    resizeCanvas(windowWidth, windowHeight);
-  }
+// function windowResized() {
+//     resizeCanvas(windowWidth, windowHeight);
+//   }
 
 function draw () {
-    background(15);
-    updateObjects()
-    drawObjects()
+    if (gameRunning) {
+        background(15);
+        updateObjects()
+        drawObjects()
+        checkGame()
+    }
 }

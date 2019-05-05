@@ -1,4 +1,5 @@
 const LIFEVALUE = 2000
+const MEMORYTIME = 10000
 
 class Ship {
     constructor(x, y, r) {
@@ -11,37 +12,48 @@ class Ship {
         this.toRemove = false
         this.theta = 0
         this.knownEnergyLocation
-        let lastMessage = {
+        this.knownEnergyTime
 
-        }
+        this.tries = 0
+
     }
 
-    accelerate(amount){
+    accelerate(amount) {
         this.vel.x = this.vel.x * amount
         this.vel.y = this.vel.y * amount
     }
 
-    communicate() {
+    communicate(message) {
 
+        if (message.knownEnergyTime > this.knownEnergyTime) {
+            this.knownEnergyLocation = message.knownEnergyLocation
+            this.knownEnergyTime = message.knownEnergyTime
+            console.log("Updated known energy")
+        }
     }
 
     checkProximity(ships) {
         for (let ship of ships) {
             if (ship != this) {
-                if (dist(ship.pos.x, ship.pos.y, this.pos.x, this.pos.y) < 150) {
-                    // console.log("Communicating")
-
+                if (this.knownEnergyLocation) {
+                    if (dist(ship.pos.x, ship.pos.y, this.pos.x, this.pos.y) < 150) {
+                        ship.communicate({
+                            knownEnergyLocation: this.knownEnergyLocation,
+                            knownEnergyTime: this.knownEnergyTime
+                        })
+                    }
                 }
             }
         }
     }
 
-    checkEnergy(energy){
+    checkEnergy(energy) {
         // See energy
         if (dist(energy.pos.x, energy.pos.y, this.pos.x, this.pos.y) < 150) {
             // Update known energy location
             let knownVector = createVector(energy.pos.x, energy.pos.y)
             this.knownEnergyLocation = knownVector
+            this.knownEnergyTime = Date.now()
         }
         if (dist(energy.pos.x, energy.pos.y, this.pos.x, this.pos.y) < 30) {
             this.life = LIFEVALUE
@@ -66,15 +78,32 @@ class Ship {
         }
     }
 
-    randomFlying(){
+    randomFlying() {
         this.pos.add(this.vel);
     }
 
-    isHungry(){
+    isHungry() {
         return (this.life < LIFEVALUE - 1000)
     }
 
-    flyTowardsEnergy(){
+    atEnergyButGone() {
+        if (dist(this.knownEnergyLocation.x, this.knownEnergyLocation.y, this.pos.x, this.pos.y) < 20) {
+            this.tries ++
+            if (this.tries > 20){
+                this.knownEnergyLocation = undefined
+                this.knownEnergyTime = undefined
+            }
+        }
+    }
+
+    forgetEnergy() {
+        if (Date.now() - this.knownEnergyTime > MEMORYTIME) {
+            this.knownEnergyLocation = undefined
+            this.knownEnergyTime = undefined
+        }
+    }
+
+    flyTowardsEnergy() {
         let desired = p5.Vector.sub(this.knownEnergyLocation, this.pos)
         desired.normalize();
         this.vel = desired
@@ -85,9 +114,11 @@ class Ship {
     update() {
         this.checkLife()
         this.checkBounds()
-        if (!this.knownEnergyLocation){
+        this.forgetEnergy()
+        
+        if (!this.knownEnergyLocation) {
             this.randomFlying()
-        } else if(!this.isHungry()) {
+        } else if (!this.isHungry()) {
             this.randomFlying()
         } else {
             this.flyTowardsEnergy()

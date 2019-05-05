@@ -33,13 +33,13 @@ class Ship {
 
         let {x,y} = this.pos
         push();
+        rectMode(CENTER);
 
-        translate(x , y);
+        translate(x, y);
+        let a = atan2(mouseY-this.pos.y, mouseX-this.pos.x);
+        rotate(a);
 
-        let a = atan2(this.vel.y-y, this.vel.x-x);
-        rotate(a);        
-        // triangle(x, y, x - 15, y + 30, x + 15, y + 30)
-        triangle(0, 0, 0 - 15, 0 + 30, 0 + 15, 0 + 30)
+        triangle(-15, -10,-15, 10, 15, 0)
         
         pop()
 

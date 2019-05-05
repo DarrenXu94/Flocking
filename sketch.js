@@ -1,5 +1,6 @@
 let gameRunning = true
 let score = new Score()
+let NUMBEROFSHIPS = 4
 
 // Setting up objects
 let energyBall
@@ -57,7 +58,7 @@ function setup () {
     cnv.style('display', 'block');
 
     createEnergy()
-    createShips(2)
+    createShips(NUMBEROFSHIPS)
 
     background(15);
 

@@ -1,5 +1,6 @@
 const LIFEVALUE = 2000
 const MEMORYTIME = 10000
+const COMMUNICATIONSIZE = 250
 
 class Ship {
     constructor(x, y, r) {
@@ -36,7 +37,7 @@ class Ship {
         for (let ship of ships) {
             if (ship != this) {
                 if (this.knownEnergyLocation) {
-                    if (dist(ship.pos.x, ship.pos.y, this.pos.x, this.pos.y) < 150) {
+                    if (dist(ship.pos.x, ship.pos.y, this.pos.x, this.pos.y) < COMMUNICATIONSIZE) {
                         ship.communicate({
                             knownEnergyLocation: this.knownEnergyLocation,
                             knownEnergyTime: this.knownEnergyTime
@@ -49,7 +50,7 @@ class Ship {
 
     checkEnergy(energy) {
         // See energy
-        if (dist(energy.pos.x, energy.pos.y, this.pos.x, this.pos.y) < 150) {
+        if (dist(energy.pos.x, energy.pos.y, this.pos.x, this.pos.y) < COMMUNICATIONSIZE) {
             // Update known energy location
             let knownVector = createVector(energy.pos.x, energy.pos.y)
             this.knownEnergyLocation = knownVector
@@ -136,7 +137,7 @@ class Ship {
         this.theta += 0.02;
         let clarity = 50 + sin(this.theta) * 50;
         fill(255, clarity)
-        ellipse(0, 0, 150)
+        ellipse(0, 0, COMMUNICATIONSIZE)
 
 
         let knownColor = (this.knownEnergyLocation) ? 255 : fullness

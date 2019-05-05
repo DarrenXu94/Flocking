@@ -24,6 +24,7 @@ class EnergyBall {
     }
 
     draw() {
+        fill(255)
         ellipse(this.pos.x, this.pos.y, this.r);
 
     }

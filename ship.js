@@ -3,6 +3,7 @@ class Ship {
         this.pos = createVector(x,y)
         this.r = r;
         this.vel = p5.Vector.random2D();
+        this.life = 2000
     }
 
     checkBounds() {
@@ -26,11 +27,13 @@ class Ship {
     update() {
         this.checkBounds()
         this.pos.add(this.vel);
+        this.life -= 1;
 
     }
 
     draw() {
-
+        let fullness = map(this.life, 0, 2000, 0, 255)
+        fill(255, fullness , fullness)
         let {x,y} = this.pos
         push();
         rectMode(CENTER);

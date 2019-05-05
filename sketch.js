@@ -20,15 +20,15 @@ function updateObjects() {
     energyBall.update()
 
     // Ships
-    // for (let ship of ships) {
     for (let i = ships.length - 1; i >= 0; i--) {
         let ship = ships[i]
         if (ship.toRemove) {
             ships.splice(i, 1)
         }
+        ship.checkProximity(ships)
+        ship.checkEnergy(energyBall)
         ship.update()
     }
-    // }
 }
 
 // Drawing objects
@@ -63,12 +63,9 @@ function setup () {
 
 }
 
-// function windowResized() {
-//     resizeCanvas(windowWidth, windowHeight);
-//   }
-
 function draw () {
     if (gameRunning) {
+        noStroke()
         background(15);
         updateObjects()
         drawObjects()

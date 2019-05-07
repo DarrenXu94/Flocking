@@ -68,6 +68,11 @@ class Ship {
         }
     }
 
+    forgetKnownLocation() {
+        this.knownEnergyLocation = undefined
+        this.knownEnergyTime = undefined
+    }
+
     checkBounds() {
         if (this.pos.x >= windowWidth) {
             this.vel.x = this.vel.x * -1

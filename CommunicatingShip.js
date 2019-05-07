@@ -4,6 +4,11 @@ class CommunicatingShip extends Ship {
         this.tries = 0
     }
 
+    communicate(message){
+        super.communicate(message)
+        
+    }
+
     randomFlying() {
         this.pos.add(this.vel);
     }
@@ -30,15 +35,21 @@ class CommunicatingShip extends Ship {
         if (dist(this.knownEnergyLocation.x, this.knownEnergyLocation.y, this.pos.x, this.pos.y) < 20) {
             this.tries ++
             if (this.tries > 20){
-                this.knownEnergyLocation = undefined
-                this.knownEnergyTime = undefined
+                super.forgetKnownLocation()
                 this.tries = 0
             }
         }
     }
 
+    timeOutMemory(){
+        if (Date.now() - this.knownEnergyTime > 10000) {
+            super.forgetKnownLocation()
+        }
+    }
+
     update() {
         super.update()
+        this.timeOutMemory()
         if (this.isHungry()) {
             this.flyTowardsEnergy()
         } else {

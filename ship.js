@@ -93,7 +93,6 @@ class Ship {
     }
 
     draw() {
-        let fullness = map(this.life, 0, LIFEVALUE, 0, 255)
         let { x, y } = this.pos
         push();
         rectMode(CENTER);
@@ -111,6 +110,16 @@ class Ship {
         rotate(a);
         triangle(-12, -10, -12, 10, 15, 0)
         pop()
+
+
+        // Health bar
+        fill(255,0,0)
+        rect(x - 12, y + 15, 30 ,4)
+
+        let fullness = map(this.life, 0, LIFEVALUE, 0, 30)
+
+        fill(0,255,0)
+        rect(x - 12 , y + 15, fullness ,4)
 
     }
 }

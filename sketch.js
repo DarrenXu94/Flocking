@@ -1,6 +1,6 @@
 let gameRunning = true
 let score = new Score()
-let NUMBEROFSHIPS = 4
+let NUMBEROFSHIPS = 2
 
 // Setting up objects
 let energyBall
@@ -11,7 +11,7 @@ function createEnergy(){
 let ships = []
 function createShips(number){
     for (let i = 0; i < number; i++) {
-        ships.push(new Ship(random(windowWidth), random(windowHeight)))
+        ships.push(new CommunicatingShip(random(windowWidth), random(windowHeight)))
     }
 }
 

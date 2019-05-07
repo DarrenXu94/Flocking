@@ -1,11 +1,10 @@
-const LIFEVALUE = 2000
+const LIFEVALUE = 5000
 const MEMORYTIME = 10000
 const COMMUNICATIONSIZE = 250
 
 class Ship {
-    constructor(x, y, r) {
+    constructor(x, y) {
         this.pos = createVector(x, y)
-        this.r = r;
         this.vel = p5.Vector.random2D();
         this.life = Math.floor(Math.random() * (LIFEVALUE - 500 + 1)) + 500;
         this.accelerate(2)
@@ -15,7 +14,7 @@ class Ship {
         this.knownEnergyLocation
         this.knownEnergyTime
 
-        this.tries = 0
+        // this.tries = 0
 
     }
 
@@ -37,7 +36,7 @@ class Ship {
         for (let ship of ships) {
             if (ship != this) {
                 if (this.knownEnergyLocation) {
-                    if (dist(ship.pos.x, ship.pos.y, this.pos.x, this.pos.y) < COMMUNICATIONSIZE) {
+                    if (dist(ship.pos.x, ship.pos.y, this.pos.x, this.pos.y) < COMMUNICATIONSIZE + 30) {
                         ship.communicate({
                             knownEnergyLocation: this.knownEnergyLocation,
                             knownEnergyTime: this.knownEnergyTime
@@ -50,7 +49,7 @@ class Ship {
 
     checkEnergy(energy) {
         // See energy
-        if (dist(energy.pos.x, energy.pos.y, this.pos.x, this.pos.y) < COMMUNICATIONSIZE) {
+        if (dist(energy.pos.x, energy.pos.y, this.pos.x, this.pos.y) < COMMUNICATIONSIZE + 30) {
             // Update known energy location
             let knownVector = createVector(energy.pos.x, energy.pos.y)
             this.knownEnergyLocation = knownVector
@@ -79,51 +78,38 @@ class Ship {
         }
     }
 
-    randomFlying() {
-        this.pos.add(this.vel);
-    }
+    // isHungry() {
+    //     return (this.life < LIFEVALUE - 1000)
+    // }
 
-    isHungry() {
-        return (this.life < LIFEVALUE - 1000)
-    }
+    // atEnergyButGone() {
+    //     if (dist(this.knownEnergyLocation.x, this.knownEnergyLocation.y, this.pos.x, this.pos.y) < 20) {
+    //         this.tries ++
+    //         if (this.tries > 20){
+    //             this.knownEnergyLocation = undefined
+    //             this.knownEnergyTime = undefined
+    //         }
+    //     }
+    // }
 
-    atEnergyButGone() {
-        if (dist(this.knownEnergyLocation.x, this.knownEnergyLocation.y, this.pos.x, this.pos.y) < 20) {
-            this.tries ++
-            if (this.tries > 20){
-                this.knownEnergyLocation = undefined
-                this.knownEnergyTime = undefined
-            }
-        }
-    }
+    // forgetEnergy() {
+    //     if (Date.now() - this.knownEnergyTime > MEMORYTIME) {
+    //         this.knownEnergyLocation = undefined
+    //         this.knownEnergyTime = undefined
+    //     }
+    // }
 
-    forgetEnergy() {
-        if (Date.now() - this.knownEnergyTime > MEMORYTIME) {
-            this.knownEnergyLocation = undefined
-            this.knownEnergyTime = undefined
-        }
-    }
-
-    flyTowardsEnergy() {
-        let desired = p5.Vector.sub(this.knownEnergyLocation, this.pos)
-        desired.normalize();
-        this.vel = desired
-        this.accelerate(2)
-        this.pos.add(this.vel)
-    }
+    // flyTowardsEnergy() {
+    //     let desired = p5.Vector.sub(this.knownEnergyLocation, this.pos)
+    //     desired.normalize();
+    //     this.vel = desired
+    //     this.accelerate(2)
+    //     this.pos.add(this.vel)
+    // }
 
     update() {
         this.checkLife()
         this.checkBounds()
-        this.forgetEnergy()
-        
-        if (!this.knownEnergyLocation) {
-            this.randomFlying()
-        } else if (!this.isHungry()) {
-            this.randomFlying()
-        } else {
-            this.flyTowardsEnergy()
-        }
         this.life -= 1;
 
     }

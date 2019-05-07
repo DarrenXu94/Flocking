@@ -23,12 +23,14 @@ class Ship {
         this.vel.y = this.vel.y * amount
     }
 
+    // Message received from other ship
     communicate(message) {
-
         if (message.knownEnergyTime > this.knownEnergyTime) {
             this.knownEnergyLocation = message.knownEnergyLocation
             this.knownEnergyTime = message.knownEnergyTime
-            console.log("Updated known energy")
+        } else if (!this.knownEnergyTime) {
+            this.knownEnergyLocation = message.knownEnergyLocation
+            this.knownEnergyTime = message.knownEnergyTime
         }
     }
 
@@ -78,35 +80,6 @@ class Ship {
         }
     }
 
-    // isHungry() {
-    //     return (this.life < LIFEVALUE - 1000)
-    // }
-
-    // atEnergyButGone() {
-    //     if (dist(this.knownEnergyLocation.x, this.knownEnergyLocation.y, this.pos.x, this.pos.y) < 20) {
-    //         this.tries ++
-    //         if (this.tries > 20){
-    //             this.knownEnergyLocation = undefined
-    //             this.knownEnergyTime = undefined
-    //         }
-    //     }
-    // }
-
-    // forgetEnergy() {
-    //     if (Date.now() - this.knownEnergyTime > MEMORYTIME) {
-    //         this.knownEnergyLocation = undefined
-    //         this.knownEnergyTime = undefined
-    //     }
-    // }
-
-    // flyTowardsEnergy() {
-    //     let desired = p5.Vector.sub(this.knownEnergyLocation, this.pos)
-    //     desired.normalize();
-    //     this.vel = desired
-    //     this.accelerate(2)
-    //     this.pos.add(this.vel)
-    // }
-
     update() {
         this.checkLife()
         this.checkBounds()
@@ -125,9 +98,9 @@ class Ship {
         fill(255, clarity)
         ellipse(0, 0, COMMUNICATIONSIZE)
 
-
-        let knownColor = (this.knownEnergyLocation) ? 255 : fullness
-        fill(255, knownColor, fullness)
+        let knownColor = (this.knownEnergyLocation) ? 255 : 0
+        // let knownColor = (this.knownEnergyLocation) ? 255 : fullness
+        fill(knownColor, knownColor, knownColor)
 
         let a = atan2(this.vel.y + y - this.pos.y, this.vel.x + x - this.pos.x);
         rotate(a);

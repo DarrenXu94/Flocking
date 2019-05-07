@@ -1,6 +1,6 @@
 let gameRunning = true
 let score = new Score()
-let NUMBEROFSHIPS = 2
+let NUMBEROFSHIPS = 4
 
 // Setting up objects
 let energyBall
